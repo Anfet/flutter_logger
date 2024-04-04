@@ -91,5 +91,5 @@ void warn(message, {String? tag, Object? error, StackTrace? stack}) =>
 
 void trace(message, {String? tag, Object? error, StackTrace? stack}) => logMessage(message, level: Level.trace, tag: tag, error: error, stack: stack);
 
-void recordException(message, [String? tag, Object? error, StackTrace? stack]) =>
-    logMessage(message, level: Level.error, tag: tag, error: error, stack: stack);
+void recordException(Object error, {StackTrace? stack, String? tag, String? message}) =>
+    logMessage(message ?? '$error', level: Level.error, tag: tag, error: error, stack: stack);
