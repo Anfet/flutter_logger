@@ -6,7 +6,7 @@ import 'package:logger/logger.dart';
 import 'package:sprintf/sprintf.dart';
 
 const appTag = 'APP';
-const _maxCharactersPerLog =700;
+const _maxCharactersPerLog = 700;
 final _splitter = RegExp('.{1,$_maxCharactersPerLog}');
 final _dateFormatter = DateFormat("Hms");
 const _tagAction = ":";
@@ -74,18 +74,22 @@ class CustomLogger extends LogPrinter {
   }
 }
 
-void logMessage(message, {String? tag = appTag, Level level = Level.trace, Object? error, StackTrace? stack, bool truncateMessage = true}) {
-  var text= '$message';
-  if (truncateMessage == true) {
-    text = text.toString().substring(0, min(text.length, _maxCharactersPerLog));
-    logger.log(level, "$tag$_tagAction $message", error: error, stackTrace: stack);
-  } else {
-    var texts = _splitter.allMatches(text).map((match) => match[0] ?? '').toList();
-    var start = '$tag$_tagAction ${texts.removeAt(0)}';
-    logger.log(level, start, error: error, stackTrace: stack);
-    for (var text in texts) {
-      logger.log(level, text, error: error, stackTrace: stack);
+void logMessage(message, {String? tag = appTag, Level level = Level.trace, Object? error, StackTrace? stack, bool truncateMessage = true}) =>
+    logger.logMessage(message, tag: tag, level: level, error: error, stack: stack, truncateMessage: truncateMessage);
+
+extension LoggerFuncExt on Logger {
+  void logMessage(message, {String? tag = appTag, Level level = Level.trace, Object? error, StackTrace? stack, bool truncateMessage = true}) {
+    var text = '$message';
+    if (truncateMessage == true) {
+      text = text.toString().substring(0, min(text.length, _maxCharactersPerLog));
+      this.log(level, "$tag$_tagAction $message", error: error, stackTrace: stack);
+    } else {
+      var texts = _splitter.allMatches(text).map((match) => match[0] ?? '').toList();
+      var start = '$tag$_tagAction ${texts.removeAt(0)}';
+      this.log(level, start, error: error, stackTrace: stack);
+      for (var text in texts) {
+        this.log(level, text, error: error, stackTrace: stack);
+      }
     }
   }
-
 }
