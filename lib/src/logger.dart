@@ -81,8 +81,10 @@ extension LoggerFuncExt on Logger {
   void logMessage(message, {String? tag = appTag, Level level = Level.trace, Object? error, StackTrace? stack, bool truncateMessage = true}) {
     var text = '$message';
     if (truncateMessage == true) {
+      var rawTextLength = text.length;
       text = text.toString().substring(0, min(text.length, _maxCharactersPerLog));
-      this.log(level, "$tag$_tagAction $message", error: error, stackTrace: stack);
+      var lenDif =  rawTextLength - text.length;
+      this.log(level, "$tag$_tagAction $text ${lenDif > 0 ? ' ...(+$lenDif chars)' : ''}", error: error, stackTrace: stack);
     } else {
       var texts = _splitter.allMatches(text).map((match) => match[0] ?? '').toList();
       var start = '$tag$_tagAction ${texts.removeAt(0)}';
