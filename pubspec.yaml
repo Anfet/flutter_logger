@@ -1,6 +1,6 @@
 name: siberian_logger
 description: "custom logger for siberian projects"
-version: 1.0.0
+version: 0.0.1
 homepage: https://git.siberian.pro/toplionkin/flutter_siberian_logger.git
 
 environment:
@@ -19,6 +19,6 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  flutter_lints: ^3.0.0
+  flutter_lints: ^3.0.2
 
 flutter:

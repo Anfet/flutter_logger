@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:sprintf/sprintf.dart';
 
-const appTag = 'APP';
+const _appTag = 'APP';
 const _maxCharactersPerLog = 700;
 final _splitter = RegExp('.{1,$_maxCharactersPerLog}');
 final _dateFormatter = DateFormat("Hms");
@@ -74,11 +74,11 @@ class CustomLogger extends LogPrinter {
   }
 }
 
-void logMessage(message, {String? tag = appTag, Level level = Level.trace, Object? error, StackTrace? stack, bool truncateMessage = true}) =>
+void logMessage(message, {String? tag = _appTag, Level level = Level.trace, Object? error, StackTrace? stack, bool truncateMessage = true}) =>
     logger.logMessage(message, tag: tag, level: level, error: error, stack: stack, truncateMessage: truncateMessage);
 
 extension LoggerFuncExt on Logger {
-  void logMessage(message, {String? tag = appTag, Level level = Level.trace, Object? error, StackTrace? stack, bool truncateMessage = true}) {
+  void logMessage(message, {String? tag = _appTag, Level level = Level.trace, Object? error, StackTrace? stack, bool truncateMessage = true}) {
     var text = '$message';
     if (truncateMessage == true) {
       var rawTextLength = text.length;
