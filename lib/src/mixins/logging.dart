@@ -12,6 +12,6 @@ mixin Logging {
   void trace(message, {String? tag, Object? error, StackTrace? stack, bool truncateMessage = true}) =>
       logMessage(message, level: Level.trace, tag: tag ?? "$runtimeType", error: error, stack: stack);
 
-  void error(message, [Object? error, StackTrace? stack, String? tag, bool truncateMessage = true]) =>
+  void recordException(message, [Object? error, StackTrace? stack, String? tag, bool truncateMessage = true]) =>
       logMessage(message, level: Level.error, tag: tag ?? "$runtimeType", error: error, stack: stack);
 }
