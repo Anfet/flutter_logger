@@ -1,9 +1,9 @@
 import 'package:flutter/foundation.dart';
 import 'package:logger/logger.dart';
-import 'package:siberian_logger/src/logger.dart';
+
+import '../logger.dart';
 
 mixin Logging {
-
   @protected
   void log(message, {String? tag, Level level = Level.trace, Object? error, StackTrace? stack, bool truncateMessage = true}) =>
       logMessage(message, level: level, tag: tag ?? "$runtimeType", error: error, stack: stack);
