@@ -1,14 +1,12 @@
 import 'dart:convert';
 import 'dart:math';
 
-import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
 import 'package:sprintf/sprintf.dart';
 
 const _appTag = 'APP';
 const _maxCharactersPerLog = 700;
 final _splitter = RegExp('.{1,$_maxCharactersPerLog}');
-final _dateFormatter = DateFormat("Hms");
 const _tagAction = ":";
 const _encoder = JsonEncoder.withIndent(null);
 
@@ -43,14 +41,11 @@ class CustomLogger extends LogPrinter {
     final messageStr = _stringifyMessage(event.message);
     final errorStr = event.error != null ? '\n${event.error}' : '';
     final now = DateTime.now();
-    final time = _dateFormatter.format(now);
-    final msec = sprintf("%03i", [now.millisecond]);
-    final timeStr = "$time.$msec";
+    final time = sprintf('%02i:%02i:%02i.%03i', [now.hour, now.minute, now.second, now.millisecond]);
     final traceStr = event.stackTrace == null ? "" : "\n${event.stackTrace}";
     final label = _labelFor(event.level);
-    var text = '$timeStr $label $messageStr$errorStr$traceStr';
+    var text = '$time $label $messageStr$errorStr$traceStr';
     text = messageTransformer?.call(text) ?? text;
-
     return [text];
   }
 
