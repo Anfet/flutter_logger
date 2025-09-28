@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'dart:math';
 
 import 'package:flutter/foundation.dart';
@@ -8,11 +7,10 @@ import 'package:talker/talker.dart';
 const _appTag = 'APP';
 const _maxCharactersPerLog = 700;
 final _splitter = RegExp('.{1,$_maxCharactersPerLog}');
-const _tagAction = ":";
 
 TalkerLoggerSettings defaultLoggerSettings = TalkerLoggerSettings(
   lineSymbol: '',
-  maxLineWidth: 700,
+  maxLineWidth: _maxCharactersPerLog,
   defaultTitle: _appTag,
   colors: {
     LogLevel.verbose: AnsiPen()..black(),
@@ -47,10 +45,13 @@ Talker get logger => _logger;
 
 set installGlobalLogger(Talker value) => _logger = value;
 
-extension LoggerFuncExt on Talker {
-  void logMessage(
+void logMessage(message, {String? tag, LogLevel level = LogLevel.verbose, Object? error, StackTrace? stack, bool truncateMessage = true}) =>
+    logger._logMessage(message, level: level, error: error, stack: stack, tag: tag);
+
+extension on Talker {
+  void _logMessage(
     message, {
-    String? tag = _appTag,
+    String? tag,
     LogLevel level = LogLevel.verbose,
     Object? error,
     StackTrace? stack,
@@ -58,20 +59,25 @@ extension LoggerFuncExt on Talker {
   }) {
     var text = '$message';
 
+    final penByLogKey = settings.getPenByKey(level.name);
+    final title = tag ?? settings.getTitleByKey(level.name);
+
     if (truncateMessage == true) {
       var rawTextLength = text.length;
       text = text.toString().substring(0, min(text.length, _maxCharactersPerLog));
       var lenDif = rawTextLength - text.length;
-      this.log("$text ${lenDif > 0 ? ' ...(+$lenDif chars)' : ''}", logLevel: level, exception: error, stackTrace: stack);
+      var log = "$text ${lenDif > 0 ? ' ...(+$lenDif chars)' : ''}";
+
+      logCustom(SimpleLog(log, logLevel: level, title: title, exception: error, stackTrace: stack, pen: penByLogKey));
     } else {
       var texts = _splitter.allMatches(text).map((match) => match[0] ?? '').toList();
       if (texts.isNotEmpty) {
-        var start = '${texts.removeAt(0)}';
-        this.log(start, logLevel: level, exception: error, stackTrace: stack);
+        var start = texts.removeAt(0);
+        logCustom(SimpleLog(start, logLevel: level, title: title, exception: error, stackTrace: stack, pen: penByLogKey));
       }
 
       for (var text in texts) {
-        this.log(text, logLevel: level, exception: error, stackTrace: stack);
+        logCustom(SimpleLog(text, logLevel: level, title: title, exception: error, stackTrace: stack, pen: penByLogKey));
       }
     }
   }
