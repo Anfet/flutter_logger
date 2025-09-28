@@ -47,6 +47,7 @@ Talker get logger => _logger;
 
 set installGlobalLogger(Talker value) => _logger = value;
 
+
 extension LoggerFuncExt on Talker {
   void logMessage(
     message, {
