@@ -1,7 +1,7 @@
-library siberian_logger;
+library flutter_logger;
 
-export 'package:logger/logger.dart';
-export 'package:sprintf/sprintf.dart';
+export 'package:talker/talker.dart';
+export 'package:talker_logger/talker_logger.dart';
 
 export 'src/logger.dart';
 export 'src/mixins/logging.dart';

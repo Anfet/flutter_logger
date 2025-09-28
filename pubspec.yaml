@@ -1,19 +1,16 @@
 name: flutter_logger
-description: "custom logger for flutter projects"
-version: 0.0.3
+description: "custom talker config"
+version: 0.0.4
 homepage: https://github.com/Anfet/flutter_logger.git
 
 environment:
-  sdk: '>=3.3.0 <4.0.0'
-  flutter: ">=1.17.0"
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   flutter:
     sdk: flutter
 
-
-  logger: ^2.2.0
-  sprintf: ^7.0.0
+  talker: ^5.0.1
 
 dev_dependencies:
   flutter_test:
