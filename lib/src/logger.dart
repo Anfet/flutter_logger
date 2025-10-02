@@ -59,8 +59,8 @@ extension on Talker {
   }) {
     var text = '$message';
 
-    final penByLogKey = settings.getPenByKey(level.name);
-    final title = tag ?? settings.getTitleByKey(level.name);
+    final penByLogKey = settings.getPenByLogKey(level.name);
+    final title = tag ?? settings.getTitleByLogKey(level.name);
 
     if (truncateMessage == true) {
       var rawTextLength = text.length;
