@@ -1,5 +1,3 @@
-library flutter_logger;
-
 export 'package:talker/talker.dart';
 export 'package:talker_logger/talker_logger.dart';
 export 'package:sprintf/sprintf.dart';

@@ -6,7 +6,6 @@ import 'package:talker/talker.dart';
 
 const _appTag = 'APP';
 const _maxCharactersPerLog = 700;
-final _splitter = RegExp('.{1,$_maxCharactersPerLog}');
 
 TalkerLoggerSettings defaultLoggerSettings = TalkerLoggerSettings(
   lineSymbol: '',
@@ -45,8 +44,21 @@ Talker get logger => _logger;
 
 set installGlobalLogger(Talker value) => _logger = value;
 
-void logMessage(message, {String? tag, LogLevel level = LogLevel.verbose, Object? error, StackTrace? stack, bool truncateMessage = true}) =>
-    logger._logMessage(message, level: level, error: error, stack: stack, tag: tag);
+void logMessage(
+  message, {
+  String? tag,
+  LogLevel level = LogLevel.verbose,
+  Object? error,
+  StackTrace? stack,
+  bool truncateMessage = true,
+}) => logger._logMessage(
+  message,
+  level: level,
+  error: error,
+  stack: stack,
+  tag: tag,
+  truncateMessage: truncateMessage,
+);
 
 extension on Talker {
   void _logMessage(
@@ -59,8 +71,8 @@ extension on Talker {
   }) {
     var text = '$message';
 
-    final penByLogKey = settings.getPenByLogKey(level.name);
-    final title = tag ?? settings.getTitleByLogKey(level.name);
+    final penByLogKey = settings.getPenByKey(level.name);
+    final title = tag ?? settings.getTitleByKey(level.name);
 
     if (truncateMessage == true) {
       var rawTextLength = text.length;
@@ -70,7 +82,11 @@ extension on Talker {
 
       logCustom(SimpleLog(log, logLevel: level, title: title, exception: error, stackTrace: stack, pen: penByLogKey));
     } else {
-      var texts = _splitter.allMatches(text).map((match) => match[0] ?? '').toList();
+      var texts = <String>[];
+      for (var i = 0; i < text.length; i += _maxCharactersPerLog) {
+        final end = min(i + _maxCharactersPerLog, text.length);
+        texts.add(text.substring(i, end));
+      }
       if (texts.isNotEmpty) {
         var start = texts.removeAt(0);
         logCustom(SimpleLog(start, logLevel: level, title: title, exception: error, stackTrace: stack, pen: penByLogKey));
