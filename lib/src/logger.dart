@@ -51,14 +51,16 @@ void logMessage(
   Object? error,
   StackTrace? stack,
   bool truncateMessage = true,
-}) => logger._logMessage(
-  message,
-  level: level,
-  error: error,
-  stack: stack,
-  tag: tag,
-  truncateMessage: truncateMessage,
-);
+  Talker? talker,
+}) =>
+    (talker ?? logger)._logMessage(
+      message,
+      level: level,
+      error: error,
+      stack: stack,
+      tag: tag,
+      truncateMessage: truncateMessage,
+    );
 
 extension on Talker {
   void _logMessage(
